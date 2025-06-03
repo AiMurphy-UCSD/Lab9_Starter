@@ -7,6 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "44a389d49d564b628a99c2841ca6c668"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
   <style>
     button {
       margin: 3px;
@@ -88,6 +96,7 @@
   </main>
 
   <script>
+    TrackJS.track('Testing TrackJS!');
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +104,90 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        // Input validation
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+          throw new Error('Both inputs must be valid numbers.');
+        }
+
+        firstNum = Number(firstNum);
+        secondNum = Number(secondNum);
+
+        if (operator === '/' && secondNum === 0) {
+          throw new Error('Division by zero is not allowed.');
+        }
+
+        let result = eval(`${firstNum} ${operator} ${secondNum}`);
+        output.innerHTML = result;
+      } catch (err) {
+        console.error('Calculation error:', err);
+      } finally {
+        console.log('Calculation attempt finished.');
+      }
     });
+
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', () => {
+      console.log('This is a console log message.');
+    });
+    errorBtns[1].addEventListener('click', () => {
+      console.error('This is a console error message.');
+    });
+    errorBtns[2].addEventListener('click', () => {
+      console.count('This is a console count message.');
+    });
+    errorBtns[3].addEventListener('click', () => {
+      console.warn('This is a console warning message.');
+    });
+    errorBtns[4].addEventListener('click', () => {
+      console.assert(false, 'This is a console assert message.');
+    });
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(document.querySelector('output'));
+    });
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(document.querySelector('output'));
+    });
+    errorBtns[8].addEventListener('click', () => {
+      console.group('Console Group Start');
+      console.log('This is inside the group.');
+    });
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd();
+    });
+    errorBtns[10].addEventListener('click', () => {
+      console.table([{ name: 'Aidan', age: 322 }, { name: 'Bob', age: 50 }]);
+    });
+    errorBtns[11].addEventListener('click', () => {
+      console.time('Timer');
+      console.log('Timer started.');
+    });
+    errorBtns[12].addEventListener('click', () => {
+        console.timeLog('Timer', 'Logging time elapsed.');
+        console.timeEnd('Timer');
+    });
+    errorBtns[13].addEventListener('click', () => {
+      console.trace('This is a console trace message.');
+    });
+    errorBtns[14].addEventListener('click', () => {
+      //try {
+        throw new Error('This is a global error triggered by a button click.');
+      //} catch (error) {
+        //console.error('Caught error from global error button:', error);
+      //} finally {
+      //  console.log('Global error button click handled.');
+     // }
+    });
+    
+
   </script>
 </body>
 
